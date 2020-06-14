@@ -17,7 +17,7 @@ function YamahaYXC(ip, responseDelay, requestTimeout)
     this.responseDelay = responseDelay;
     this.pollingDelay = 500; // used for menu ready check, webradio e.g.
     this.requestTimeout = requestTimeout;
-    this.catchRequestErrors = true
+    this.catchRequestErrors = true;
 }
 
 extend(YamahaYXC.prototype, api_cmd.prototype);

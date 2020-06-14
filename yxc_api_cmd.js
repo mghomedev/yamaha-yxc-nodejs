@@ -19,12 +19,12 @@ YamahaYXC.prototype.SendGetToDevice = function(cmd) {
         };
         if (this.requestTimeout) req.timeout = this.requestTimeout;
 
-        var prom = request.getAsync(req).delay(delay).then(response => response.body)
+        var prom = request.getAsync(req).delay(delay).then(response => response.body);
         if (self.catchRequestErrors === true) prom.catch(console.log.bind(console));
 
-        return prom
+        return prom;
 
-    })
+    });
 
 };
 
@@ -39,24 +39,24 @@ YamahaYXC.prototype.SendPostToDevice = function(cmd, data) {
         };
         if (this.requestTimeout) req.timeout = this.requestTimeout;
 
-        var prom = request.postAsync(req).delay(delay).then(response => response.body)
+        var prom = request.postAsync(req).delay(delay).then(response => response.body);
         if (self.catchRequestErrors === true) prom.catch(console.log.bind(console));
 
-        return prom
+        return prom;
 
-    })
+    });
 
 };
 
 YamahaYXC.prototype.getOrDiscoverIP = function() {
-    if (this.ip) return Promise.resolve(this.ip)
+    if (this.ip) return Promise.resolve(this.ip);
     if (!this.discoverPromise) {
         this.discoverPromise = this.discover().tap(function(ip) {
-            this.ip = ip
-        })
+            this.ip = ip;
+        });
     }
-    return this.discoverPromise
-}
+    return this.discoverPromise;
+};
 
 
 var reyxcControl = /<yamaha:X_yxcControlURL>*.YamahaExtendedControl.*<\/yamaha:X_yxcControlURL>/i; // instead query to MusicCast, because YSP soundbar is not returning MusicCast! it is "TV Peripheral"
@@ -73,7 +73,7 @@ YamahaYXC.prototype.discover = function(timeout) {
 
         function notFound() {
             if (peer) peer.close();
-            reject(new Error('Yamaha MusicCast not found'))
+            reject(new Error('Yamaha MusicCast not found'));
         }
 
         peer.on("ready", function() {
@@ -88,13 +88,13 @@ YamahaYXC.prototype.discover = function(timeout) {
                         var name = reFriendlyName.exec(body);
                         var uid = reUniqueID.exec(body);
                         clearTimeout(timer);
-                        peer.close()
-                        resolve([address.address, name[1], model[1], uid[1]])
+                        peer.close();
+                        resolve([address.address, name[1], model[1], uid[1]]);
                     }
                 });
             } //müsste hier reject stehen?
         }).start();
-    })
+    });
 
 };
 
@@ -124,7 +124,7 @@ YamahaYXC.prototype.discover = function(timeout) {
         return this.SendGetToDevice(command);
     };
     YamahaYXC.prototype.powerOn = function(zone) {
-        var command = '/' + getZone(zone) + '/setPower?power=on'
+        var command = '/' + getZone(zone) + '/setPower?power=on';
         return this.SendGetToDevice(command);
     };
     YamahaYXC.prototype.powerOff = function(zone) {
@@ -157,7 +157,7 @@ YamahaYXC.prototype.discover = function(timeout) {
         return this.SendGetToDevice(command);
     };
     YamahaYXC.prototype.setInput = function(input, zone, mode) {
-        if(mode == null || mode == 'undefined' ) {mode =''} else {mode='&mode='+mode}
+        if(mode == null || mode == 'undefined' ) {mode ='';} else {mode='&mode='+mode;}
         //check for correct input in calling program
         var command = '/' + getZone(zone) + '/setInput?input=' + input + mode;
         return this.SendGetToDevice(command);
@@ -321,23 +321,23 @@ YamahaYXC.prototype.discover = function(timeout) {
     };
 //----------- NETUSB list info -------------
     YamahaYXC.prototype.getListInfo = function(input,index,size,lang) {
-        if(size == null || size == 'undefined' ) {size = '8'}
-        if(lang == null || lang == 'undefined' ) {lang =''} else {lang='&lang='+lang;}
+        if(size == null || size == 'undefined' ) {size = '8';}
+        if(lang == null || lang == 'undefined' ) {lang ='';} else {lang='&lang='+lang;}
         var command = '/netusb/getListInfo?input='+input+'&index='+index+'&size='+size+lang;
         return this.SendGetToDevice(command);
     };
     YamahaYXC.prototype.setListControl = function(listId, type, index,zone) {
-        if(index == null || index == 'undefined' ) {index =''} else {index='&index='+index;}
-        if(zone == null || zone == 'undefined' ) {zone =''} else {zone='&zone='+zone;}
+        if(index == null || index == 'undefined' ) {index ='';} else {index='&index='+index;}
+        if(zone == null || zone == 'undefined' ) {zone ='';} else {zone='&zone='+zone;}
         var command = '/netusb/setListControl?list_id='+listId+'&type='+type+index+zone;
         return this.SendGetToDevice(command);
     };
 //------------ NETUSB + CD commands ------------
     YamahaYXC.prototype.getPlayInfo = function(val) {
         if (val ==='cd' ){
-            var command = '/cd/getPlayInfo' ;
+            let command = '/cd/getPlayInfo' ;
         } else {
-            var command = '/netusb/getPlayInfo' ;
+            let command = '/netusb/getPlayInfo' ;
         }
         return this.SendGetToDevice(command);
     };
@@ -543,7 +543,7 @@ YamahaYXC.prototype.discover = function(timeout) {
     YamahaYXC.prototype.setClockFormat = function(format) {
         var command = '/clock/setClockFormat?format='+format;
         return this.SendGetToDevice(command);
-    }
+    };
     YamahaYXC.prototype.setAlarmSettings= function(data) {
         var command = '/clock/SetAlarmSettings';
         return this.SendPostToDevice(command, data );
